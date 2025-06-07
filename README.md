@@ -46,23 +46,6 @@ docker-compose up -d
 4. `GET /urls/{alias}` - Получение информации о URL по алиасу
 5. `GET /{alias}` - Редирект на оригинальный URL
 
-## Разработка
-
-1. Установите зависимости:
-```bash
-pip install -r requirements.txt
-```
-
-2. Создайте файл .env с настройками:
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/url_alias
-SECRET_KEY=your-secret-key
-```
-
-3. Запустите сервис:
-```bash
-uvicorn app.main:app --reload
-```
 
 ## Тестирование
 
@@ -111,7 +94,3 @@ curl "http://localhost:8000/urls/{alias}"
 ```bash
 curl -L "http://localhost:8000/{alias}"
 ```
-
-## Лицензия
-
-MIT 
