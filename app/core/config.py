@@ -1,9 +1,13 @@
 from typing import Optional
-from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn, validator
+from pydantic import BaseModel, PostgresDsn, validator
 
 
-class Settings(BaseSettings):
+class Settings(BaseModel):
+    DATABASE_URL: str = "postgresql://postgres:postgres@db:5432/url_alias"
+    SECRET_KEY: str = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
     PROJECT_NAME: str = "URL Alias Service"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
@@ -28,7 +32,8 @@ class Settings(BaseSettings):
 
     # Настройки безопасности
     SECRET_KEY: str = "your-secret-key-here"  # В продакшене заменить на безопасный ключ
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 дней
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # Настройки URL
     URL_EXPIRATION_DAYS: int = 1

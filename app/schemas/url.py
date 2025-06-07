@@ -31,12 +31,9 @@ class URLVisit(URLVisitBase):
 
 class URL(URLBase):
     id: int
-    short_code: str
-    is_active: bool
-    created_at: datetime
-    expires_at: datetime
+    alias: str
     clicks: int
-    visits: List[URLVisit] = []
+    created_at: datetime
 
     class Config:
         from_attributes = True

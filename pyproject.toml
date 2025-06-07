@@ -3,6 +3,9 @@ name = "url-alias-service"
 version = "0.1.0"
 description = "URL Alias Service - сервис для создания коротких URL"
 authors = ["Your Name <your.email@example.com>"]
+packages = [
+    { include = "app" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.url import URL, URLVisit
+from app.db.base import URL
+from app.schemas.url import URLCreate
 
 
 def generate_short_code(length: int = settings.SHORT_URL_LENGTH) -> str:
@@ -15,15 +17,12 @@ def generate_short_code(length: int = settings.SHORT_URL_LENGTH) -> str:
     return ''.join(random.choice(characters) for _ in range(length))
 
 
-def create_url(db: Session, original_url: str) -> URL:
-    """Создание нового короткого URL"""
-    short_code = generate_short_code()
-    expires_at = datetime.utcnow() + timedelta(days=settings.URL_EXPIRATION_DAYS)
-    
+def create_url(db: Session, url: URLCreate) -> URL:
+    """Создает новый URL с алиасом"""
+    alias = generate_alias()
     db_url = URL(
-        original_url=original_url,
-        short_code=short_code,
-        expires_at=expires_at
+        original_url=str(url.original_url),
+        alias=alias
     )
     db.add(db_url)
     db.commit()
@@ -97,4 +96,23 @@ def get_url_stats(db: Session, url_id: int) -> dict:
         "total_clicks": url.clicks,
         "unique_visitors": unique_visitors,
         "last_visited": max(visit.visited_at for visit in visits) if visits else None
-    } 
+    }
+
+
+def generate_alias(length: int = 6) -> str:
+    """Генерирует случайный алиас заданной длины"""
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+
+def get_url_by_alias(db: Session, alias: str) -> URL:
+    """Получает URL по алиасу"""
+    return db.query(URL).filter(URL.alias == alias).first()
+
+
+def increment_clicks(db: Session, url: URL) -> URL:
+    """Увеличивает счетчик кликов"""
+    url.clicks += 1
+    db.commit()
+    db.refresh(url)
+    return url 
